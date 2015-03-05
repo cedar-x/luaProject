@@ -2,11 +2,20 @@
 dofile "./script/xxs/include.lua"
 
 function main()
-	print("==xxsadd:", add(2,3));
-	print("==background==:", background);
+	print("==lua_add:", add(2,3));
+	print("==cpp_background==:", background);
 	if background then 
-		print("background:r",background.r," g:", background.g," b:", background.b);
+		print("cpp_background:r",background.r," g:", background.g," b:", background.b);
 	end
-	print("==cppadd:", add2(1,3));
-	print("==cppsub:", sub2(5,2));
+	print("==cpp_add:", add2(1,3));
+	print("==cpp_sub:", sub2(5,2));
+	-- local c = CTest()
+	-- print("c.Add(1, 2) ==> " .. c:Add(1, 2));
+	-- local d = CTest()
+	-- print("d.Add(4, 5) ==> " .. d:Add(4, 5));
+	local ff = Foo(21)
+    local v = ff:add(1, 5)
+    print("===cpp_class:Foo(3):add(1,4):", v, " value:", ff:getV());
+    ff:setV(13);
+    print("==value:", ff:getV());
 end

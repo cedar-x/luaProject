@@ -1,11 +1,7 @@
-#include <stdio.h>
 
-extern "C"{
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-};
-
+#include "mainHead.h"
+#include "consoleLog.h"
+#include "LuaPort.h"
 
 lua_State *L;
 int luaAdd(int x, int y)
@@ -108,6 +104,7 @@ static int lua_sub(lua_State* lua)
 	lua_pushnumber(L,op1 - op2);
 	return 1;
 }
+
 int main(int argc, char *argv[])
 {
 	int sum = 0;
@@ -128,7 +125,11 @@ int main(int argc, char *argv[])
 	luaWidth_Height();
 	luaBkground();
 	luaNewbk();
-
+	//==
+	LuaPort::RegisterClass(L);
+	lua_pushnumber(L,0);
+	LuaPort::constructor(L);
+	//==
 	lua_getglobal(L, "main");
 	if(lua_pcall(L,0,0,0)){
 		printf("CallMain Error:%s\n", lua_tostring(L, -1));
@@ -139,3 +140,82 @@ int main(int argc, char *argv[])
 	getchar();
 	return 0;
 }
+
+
+/*
+
+
+class CTest
+{
+public:
+	CTest(){};
+	virtual ~CTest(){};
+	int Add(int x, int y)
+	{
+		printf("%p Add: x=%d, y=%d\n", this, x, y);
+		return x + y;
+	};
+};
+
+static int CreateCTest(lua_State* L)
+{
+	// 创建一个元表为CTest的Table——Lua对象
+	*(CTest**)lua_newuserdata(L, sizeof(CTest*)) = new CTest();
+	luaL_getmetatable(L, "CTest");
+	lua_setmetatable(L, -2);
+	return 1;
+}
+
+static int DestoryCTest(lua_State* L)
+{
+	// 释放对象
+	delete *(CTest**)lua_topointer(L, 1);
+	return 0;
+}
+
+static int CallAdd(lua_State* L)
+{
+	// 调用C++类方法的跳板函数。
+	CTest* pT = *(CTest**)lua_topointer(L, 1);
+	lua_pushnumber(L, pT->Add(lua_tonumber(L, 2), lua_tonumber(L, 3)));
+	return 1;
+}
+
+int main(int argc, char * argv[])
+{
+	lua_State *L = luaL_newstate();
+	luaopen_base(L);    
+
+	// 往lua中注册类
+	lua_pushcfunction(L, CreateCTest);    // 注册用于创建类的全局函数
+	lua_setglobal(L,  "CTest");
+
+	luaL_newmetatable(L, "CTest");           // 创建一个元表
+	lua_pushstring(L, "__gc");                    // 垃圾回收
+	lua_pushcfunction(L, DestoryCTest);
+	lua_settable(L, -3);                               // 公共函数调用的实现就在此啊
+	lua_pushstring(L, "__index");
+	lua_pushvalue(L, -2);                           // 注意这一句，其实是将__index设置成元表自己
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "Add");                     // 放元表中增加一个函数。这样所有基于该元表的Table就都有Add方法了
+	lua_pushcfunction(L, CallAdd);
+	lua_settable(L, -3);
+	lua_pop(L,1);
+
+	if(luaL_loadfile(L, "./script/main.lua")||lua_pcall(L,0,0,0)){
+		printf("Loadfile Error:%s\n", lua_tostring(L, -1));
+		getchar();
+		return 0;
+	}
+	lua_getglobal(L, "main");
+	if(lua_pcall(L,0,0,0)){
+		printf("CallMain Error:%s\n", lua_tostring(L, -1));
+		getchar();
+		return 0;
+	}
+	getchar();
+	lua_close(L);
+}
+
+*/

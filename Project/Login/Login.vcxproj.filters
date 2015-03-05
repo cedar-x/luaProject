@@ -18,5 +18,34 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="consoleLog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FooWrapper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Foo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="consoleLog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FooWrapper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Foo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mainHead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaPort.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
   </ItemGroup>
 </Project>
