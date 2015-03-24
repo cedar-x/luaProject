@@ -3,10 +3,19 @@
 
 class consoleLog{
 public:
-	consoleLog();
+	consoleLog(lua_State* lua);
 	~consoleLog();
 public:
-	void warnInfo();
+	void warnInfo(const char*);
 	void logInfo();
+public:
+	void regFunc();
+	static int lua_warnInfo(lua_State* lua);
+	static lua_State* getState()
+	{
+		return m_lua;
+	}
+private:
+	static lua_State* m_lua;
 };
 #endif

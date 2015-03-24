@@ -18,4 +18,14 @@ function main()
     print("===cpp_class:Foo(3):add(1,4):", v, " value:", ff:getV());
     ff:setV(13);
     print("==value:", ff:getV());
+    print("============================")
+    local b = {};
+    b.a = function(str, cfunc)
+    	print("b.a start=========", str);
+    	cfunc("this is c function\n");
+	end
+	-- lua_clib(b.a, "test");
+	lua_clib(b.a,"test");
+	print("==============================");
+	Console:warn("==Console:warn..");
 end
